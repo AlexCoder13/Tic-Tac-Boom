@@ -18,7 +18,35 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupView()
+        setupConstraints()
+        buttonPushed()
+        
+        navigationItem.backButtonDisplayMode = .minimal
+        navigationController?.navigationBar.tintColor = UIColor(named: "customPrimaryColor")
+    }
     
+    private func setupView() {
+//        view.addSubview(mainView.button)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+//            mainView.button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            mainView.button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
+    
+    private func buttonPushed() {
+//        mainView.button.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
+    }
+    
+    @objc
+    private func buttonPush() {
+        let gameController = GameViewController()
+        navigationController?.pushViewController(gameController, animated: true)
+
     }
 }
 

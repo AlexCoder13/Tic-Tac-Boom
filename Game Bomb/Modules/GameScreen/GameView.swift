@@ -8,7 +8,7 @@
 import UIKit
 
 final class GameView: UIView {
-    
+    // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(named: "customGrayColor")
@@ -18,11 +18,20 @@ final class GameView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    lazy var backImageView: UIImageView = {
+        let backImageView = UIImageView()
+        backImageView.image = UIImage(named: "gameBackView")
+        backImageView.contentMode = .scaleAspectFit
+        backImageView.isUserInteractionEnabled = false
+        backImageView.translatesAutoresizingMaskIntoConstraints = false
+        return backImageView
+    }()
+    
     lazy var gameLabel: UILabel = {
         let gameLabel = UILabel()
         gameLabel.text = "Игра"
         gameLabel.textColor = UIColor(named: "customPrimaryColor")
-        gameLabel.font = .custom(font: .bold, size: 30)
+        gameLabel.font = .boldSystemFont(ofSize: 28)
         gameLabel.textAlignment = .center
         gameLabel.numberOfLines = 0
         gameLabel.translatesAutoresizingMaskIntoConstraints = false

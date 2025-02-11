@@ -8,11 +8,11 @@
 import UIKit
 
 enum CustomFont: String {
-    case bold = "SF-Pro-Rounded-Bold"
-    case light = "SF-Pro-Rounded-Light"
-    case medium = "SF-Pro-Rounded-Medium"
-    case regular = "SF-Pro-Rounded-Regular"
-    case thin = "SF-Pro-Rounded-Thin"
+    case bold = "SFProRounded-Bold"
+    case light = "SFProRounded-Light"
+    case medium = "SFProRounded-Medium"
+    case regular = "SFProRounded-Regular"
+    case thin = "SFProRounded-Thin"
 }
 /// Расширение для Font
 extension UIFont {
