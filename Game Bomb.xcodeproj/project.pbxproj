@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3A72E9362D5CD7CD009AAC4C /* DotLottie in Frameworks */ = {isa = PBXBuildFile; productRef = 3A72E9352D5CD7CD009AAC4C /* DotLottie */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		11CF33CB2D58CB5900FA00A3 /* Game Bomb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Game Bomb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A72E9362D5CD7CD009AAC4C /* DotLottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = "Game Bomb";
 			packageProductDependencies = (
+				3A72E9352D5CD7CD009AAC4C /* DotLottie */,
 			);
 			productName = "Game Bomb";
 			productReference = 11CF33CB2D58CB5900FA00A3 /* Game Bomb.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 11CF33C22D58CB5900FA00A3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3A72E9342D5CD7CD009AAC4C /* XCRemoteSwiftPackageReference "dotlottie-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 11CF33CC2D58CB5900FA00A3 /* Products */;
 			projectDirPath = "";
@@ -341,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3A72E9342D5CD7CD009AAC4C /* XCRemoteSwiftPackageReference "dotlottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LottieFiles/dotlottie-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3A72E9352D5CD7CD009AAC4C /* DotLottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A72E9342D5CD7CD009AAC4C /* XCRemoteSwiftPackageReference "dotlottie-ios" */;
+			productName = DotLottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 11CF33C32D58CB5900FA00A3 /* Project object */;
 }

@@ -18,6 +18,7 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        mainView.delegate = self
         
         setupView()
         setupConstraints()
@@ -47,6 +48,28 @@ final class MainViewController: UIViewController {
         let gameController = GameViewController()
         navigationController?.pushViewController(gameController, animated: true)
 
+    }
+}
+
+extension MainViewController: MainViewDelegate {
+    func didTapSettingButton() {
+        let categoryVC = CategoryViewController()
+        navigationController?.pushViewController(categoryVC, animated: true)
+    }
+    
+    func didTapQuestionButton() {
+        let rulesVC = RulesViewController()
+        navigationController?.pushViewController(rulesVC, animated: true)
+    }
+    
+    func didTapStartButton() {
+        let gameVC = GameViewController()
+        navigationController?.pushViewController(gameVC, animated: true)
+    }
+    
+    func didTapCategoryButton() {
+        let categoryVC = CategoryViewController()
+        navigationController?.pushViewController(categoryVC, animated: true)
     }
 }
 

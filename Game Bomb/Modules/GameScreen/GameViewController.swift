@@ -7,18 +7,25 @@
 
 import UIKit
 import AVFoundation
+import DotLottie
 
 class GameViewController: UIViewController {
     
     private let gameView = GameView()
     
     var audioPlayer: AVAudioPlayer?
+    private var tickAudioPlayer: AVAudioPlayer? // Отдельный плеер для звука таймера
     
     private var timer = Timer()
     private var currentSeconds = 0
     private var secondsForGame = [15, 20, 25, 30, 35, 40]
     
-    //    MARK: - LifeCycle
+    private var animation: DotLottieAnimation?
+    private var animationView: UIView?
+    private var isAnimationPlaying = false
+    private var animationDuration: Float = 7.3
+    private var selectedTimerDuration: Int = 0
+    
     override func loadView() {
         view = gameView
     }
@@ -28,20 +35,80 @@ class GameViewController: UIViewController {
         
         setupView()
         setupConstraints()
+        setupAnimation()
+        prepareSounds() // Предварительно загружаем звуки
         
         gameView.startButton.addTarget(self, action: #selector(pushButton), for: .touchUpInside)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pause.circle"), style: .done, target: self, action: #selector(stopTimer))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "pause.circle"),
+            style: .done,
+            target: self,
+            action: #selector(stopTimer)
+        )
         navigationItem.rightBarButtonItem?.isEnabled = false
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "customPrimaryColor")
+    }
+    
+    private func setupAnimation() {
+        guard URL(string: "https://lottie.host/283b3c79-ebb6-4439-a235-5b54cc15f7ad/zlrIDXcPgo.lottie") != nil else {
+            print("Invalid Lottie URL")
+            return
+        }
+        
+        animation = DotLottieAnimation(webURL: "https://lottie.host/283b3c79-ebb6-4439-a235-5b54cc15f7ad/zlrIDXcPgo.lottie", config: AnimationConfig(autoplay: false, loop: false))
+        animationView = animation?.view()
+        
+        if let animationView = animationView {
+            animationView.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(animationView)
+            
+            NSLayoutConstraint.activate([
+                animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                animationView.heightAnchor.constraint(equalToConstant: 550),
+                animationView.widthAnchor.constraint(equalToConstant: 480)
+            ])
+            
+            animationView.isHidden = false
+        }
+    }
+    
+    private func calculateAnimationSpeed() -> Float {
+        // Вычисляем скорость: (Длительность анимации) / (Время таймера)
+        return animationDuration / Float(selectedTimerDuration)
+    }
+    
+    private func prepareSounds() {
+        // Звук тика таймера
+        if let path = Bundle.main.path(forResource: "soundBomb", ofType: "mp3") {
+            let url = URL(fileURLWithPath: path)
+            do {
+                tickAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                tickAudioPlayer?.prepareToPlay()
+            } catch {
+                print("Ошибка загрузки звука таймера: \(error)")
+            }
+        }
+        
+        // Звук взрыва
+        if let path = Bundle.main.path(forResource: "soundBoom", ofType: "mp3") {
+            let url = URL(fileURLWithPath: path)
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.prepareToPlay()
+            } catch {
+                print("Ошибка загрузки звука взрыва: \(error)")
+            }
+        }
     }
     
     private func setupView() {
         view.addSubview(gameView.backImageView)
         view.addSubview(gameView.gameLabel)
         view.addSubview(gameView.questuonLabel)
-        view.addSubview(gameView.bombImage)
         view.addSubview(gameView.startButton)
+        view.addSubview(gameView.bombImage)
     }
     
     private func setupConstraints() {
@@ -73,42 +140,27 @@ class GameViewController: UIViewController {
         ])
     }
     
-//    private func playSound(_ sound: String) {
-//        if let path = Bundle.main.path(forResource: sound, ofType: "mp3") {
-//            let url = URL(fileURLWithPath: path)
-//            if audioPlayer == nil {
-//                do {
-//                    audioPlayer = try AVAudioPlayer(contentsOf: url)
-//                    audioPlayer?.play()
-//                } catch {
-//                    print("Ошибка при воспроизведении звука: \(error.localizedDescription)")
-//                }
-//            }
-//        } else {
-//            print("Файл не найден")
-//        }
-//    }
-    
-    private func playSound(_ sound: String) {
-        if let path = Bundle.main.path(forResource: sound, ofType: "mp3") {
-            let url = URL(fileURLWithPath: path)
-            
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer?.play()
-            } catch {
-                print("Ошибка при воспроизведении звука: \(error.localizedDescription)")
-            }
-        } else {
-            print("Файл не найден")
-        }
-    }
-    
     @objc
     private func pushButton() {
+        // Выбираем случайное время для таймера
+        selectedTimerDuration = secondsForGame.randomElement() ?? 30
+        
+        // Считаем скорость анимации перед стартом
+        animation?.setSpeed(speed: calculateAnimationSpeed())
+        
+        // Запускаем анимацию с начала
+        animationView?.isHidden = false
+        animation?.play()
+        isAnimationPlaying = true
+        
         timer.invalidate()
-        currentSeconds = 0
-        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(
+            timeInterval: 1.0,
+            target: self,
+            selector: #selector(updateTimer),
+            userInfo: nil,
+            repeats: true
+        )
         
         navigationItem.rightBarButtonItem?.isEnabled = true
         gameView.questuonLabel.text = "*Вопрос из категории*"
@@ -117,44 +169,67 @@ class GameViewController: UIViewController {
     }
     
     @objc
-    private func popProfileButton() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc
     private func stopTimer() {
-        print("Timer Stoped")
         timer.invalidate()
+        tickAudioPlayer?.stop()
+        animation?.pause()
+        isAnimationPlaying = false
         
-        audioPlayer?.stop()
-       
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "play.circle"), style: .done, target: self, action: #selector(resumeTimer))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "play.circle"),
+            style: .done,
+            target: self,
+            action: #selector(resumeTimer)
+        )
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "customPrimaryColor")
     }
     
     @objc
     private func resumeTimer() {
-        print("Timer Resumed")
-        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(
+            timeInterval: 1.0,
+            target: self,
+            selector: #selector(updateTimer),
+            userInfo: nil,
+            repeats: true
+        )
+        tickAudioPlayer?.play()
+        animation?.play()
+        isAnimationPlaying = true
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pause.circle"), style: .done, target: self, action: #selector(stopTimer))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "pause.circle"),
+            style: .done,
+            target: self,
+            action: #selector(stopTimer)
+        )
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "customPrimaryColor")
     }
     
     @objc
     private func updateTimer() {
-        if  self.currentSeconds < self.secondsForGame.randomElement() ?? 30 {
-            playSound("soundBomb")
-            self.currentSeconds += 1
+        if currentSeconds < selectedTimerDuration {
+            // Воспроизводим звук через его плеер
+            tickAudioPlayer?.play()
+            currentSeconds += 1
             print("Игра началась \(currentSeconds)")
         } else {
             timer.invalidate()
-            playSound("soundBoom")
+            tickAudioPlayer?.stop()
+            audioPlayer?.play() // Звук взрыва
+            animation?.stop()
+            animationView?.isHidden = true
+            
+            gameView.bombImage.isHidden = false
             gameView.bombImage.image = UIImage(named: "Boom Image")
             gameView.gameLabel.text = "Конец Игры"
             gameView.gameLabel.font = .custom(font: .bold, size: 28)
             gameView.questuonLabel.isHidden = true
             navigationItem.rightBarButtonItem?.isHidden = true
+            
+            //            let finalVC = FinalGameViewController()
+            //            navigationController?.pushViewController(finalVC, animated: false)
+            
             print("Игра окончена \(currentSeconds)")
         }
     }
