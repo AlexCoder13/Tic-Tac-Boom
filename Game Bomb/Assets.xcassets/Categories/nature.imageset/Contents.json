@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "bomb@1x.png",
+      "filename" : "image 6.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "bomb@2x.png",
+      "filename" : "image 6-2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "bomb.png",
+      "filename" : "image 6-3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

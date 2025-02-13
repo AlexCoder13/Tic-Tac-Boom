@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "bomb@1x.png",
+      "filename" : "check_circle_on_24.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "bomb@2x.png",
+      "filename" : "check_circle_on_24 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "bomb.png",
+      "filename" : "check_circle_on_24 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
