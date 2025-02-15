@@ -8,22 +8,43 @@
 import UIKit
 
 class FinalGameViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    // MARK: - Properties
+    private let finalView = FinalView()
+    private let finalModel = FinalModel()
+    
+    override func loadView() {
+        view = finalView
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupDelegates()
+        setupNavigation()
     }
-    */
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+            finalModel.exitGame()
+    }
+    
+    private func setupDelegates() {
+        finalView.delegate = self
+    }
+    
+    private func setupNavigation() {
+        navigationItem.hidesBackButton = true
+        navigationItem.backButtonDisplayMode = .minimal
+    }
+}
 
+extension FinalGameViewController: FinalViewDelegate {
+    func anotherQuestionButtonTapped() {
+        finalView.questuonLabel.text = finalModel.prepeareLoss()
+    }
+    
+    func startAgainButtonTapped() {
+        let gameVC = GameViewController()
+        navigationController?.pushViewController(gameVC, animated: true)
+    }
 }

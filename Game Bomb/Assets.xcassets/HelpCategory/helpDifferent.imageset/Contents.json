@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "physical-2.png",
+      "filename" : "saturn.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "physical-2 1.png",
+      "filename" : "saturn 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "physical-2 2.png",
+      "filename" : "saturn 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

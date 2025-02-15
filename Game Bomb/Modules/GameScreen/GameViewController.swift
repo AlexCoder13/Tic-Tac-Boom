@@ -13,6 +13,8 @@ final class GameViewController: UIViewController {
     private let gameView = GameView()
     private let gameModel = GameModel()
     
+    var questionCategories = MockData()
+    
     // MARK: - Lifecycle
     override func loadView() {
         view = gameView
@@ -29,9 +31,7 @@ final class GameViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if isMovingFromParent {
             gameModel.exitGame()
-        }
     }
     
     // MARK: - Setup
@@ -50,6 +50,11 @@ final class GameViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "customDarkGrayColor")
         navigationItem.rightBarButtonItem?.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = false
+        
+        navigationItem.backAction = UIAction(handler: { _ in
+            let _ = MainViewController()
+            self.navigationController?.popToRootViewController(animated: true)
+        })
     }
     
     // MARK: - Actions
@@ -62,10 +67,9 @@ final class GameViewController: UIViewController {
 extension GameViewController: GameViewDelegate {
     func startButtonTapped() {
         gameView.startButton.isHidden = true
-        gameView.questuonLabel.text = "*Вопрос из категории*"
-        gameView.questuonLabel.font = .custom(font: .bold, size: 28)
+        gameView.questuonLabel.text = gameModel.prepareQuestions()
+        gameView.questuonLabel.font = .custom(font: .bold, size: 20)
         gameModel.startGame()
-        print("Кнопка нажата")
     }
 }
 
@@ -114,7 +118,6 @@ extension GameViewController: GameModelDelegate {
         let finalVC = FinalGameViewController()
         navigationController?.pushViewController(finalVC, animated: false)
         gameView.questuonLabel.isHidden = true
-        navigationItem.rightBarButtonItem?.isHidden = true
     }
     
     @objc private func resumeButtonTapped() {

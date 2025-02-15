@@ -1,13 +1,14 @@
 //
-//  CategoryViewCell.swift
+//  HelpCategoryViewCell.swift
 //  Game Bomb
 //
-//  Created by Alexander Bokhulenkov on 09.02.2025.
+//  Created by Анна on 12.02.2025.
 //
 
 import UIKit
 
-class CategoryViewCell: UICollectionViewCell {
+
+class HelpCategoryViewCell: UICollectionViewCell {
     // MARK: - GUI Variables
     lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
@@ -27,10 +28,10 @@ class CategoryViewCell: UICollectionViewCell {
     lazy var checkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "checkImage")
-        imageView.isHidden = true
         
         return imageView
     }()
+    
     
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -88,13 +89,5 @@ class CategoryViewCell: UICollectionViewCell {
     func configure(with category: Category) {
         titleLabel.text = category.name
         iconImageView.image = category.icon
-    }
-    
-    //MARK: - Properties
-    override var isSelected: Bool {
-        didSet {
-            backgroundColor = isSelected ? .customgreen : .customLightGray
-            checkImageView.isHidden = !isSelected
-        }
     }
 }

@@ -47,13 +47,31 @@ class CategoryViewController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        
-        view.backgroundColor = UIColor(named: "customwhiteColor")
+        view.backgroundColor = .customwhite
         
+        setupNavigationBar()
         setupUI()
     }
     
     //MARK: - Private methods
+    private func setupNavigationBar() {
+        title = "Категории"
+        let backImage = UIImage(named: "back")
+        navigationController?.navigationBar.backIndicatorImage = backImage
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = backImage
+        navigationItem.backButtonTitle = ""
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.custom(font: .bold, size: 28),
+            .foregroundColor: UIColor.customDarkGray
+        ]
+        navigationController?.navigationBar.titleTextAttributes = attributes
+        
+        let rightButtonImage = UIImage(named: "questionYellow")
+        let rightButton = UIBarButtonItem(image: rightButtonImage, style: .plain, target: self, action: #selector(didTapRightButton))
+        navigationItem.rightBarButtonItem = rightButton
+    }
+    
     private func setupUI() {
         view.addSubview(collectionView)
         view.addSubview(backgroundImageView)
@@ -62,7 +80,7 @@ class CategoryViewController: UIViewController {
         setupConstraints()
     }
     
-    private func  setupConstraints() {
+    private func setupConstraints() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -71,13 +89,24 @@ class CategoryViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+    }
+    
+    @objc func didTapRightButton() {
+        let bottomSheetVC = HelpCategoryViewController()
+        bottomSheetVC.modalPresentationStyle = .pageSheet
+        
+        if let sheet = bottomSheetVC.sheetPresentationController {
+            sheet.detents = [.custom { _ in
+                return UIScreen.main.bounds.height * 0.75
+            }]
+        }
+        present(bottomSheetVC, animated: true)
     }
 }
 

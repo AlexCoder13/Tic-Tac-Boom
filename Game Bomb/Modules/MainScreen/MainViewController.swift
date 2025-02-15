@@ -72,27 +72,6 @@ extension MainViewController: MainViewDelegate {
     func didTapCategoryButton() {
         let categoryVC = CategoryViewController()
         navigationController?.pushViewController(categoryVC, animated: true)
-        categoryVC.title = "Категории"
-        let backImage = UIImage(named: "back")
-        navigationController?.navigationBar.backIndicatorImage = backImage
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = backImage
-        navigationItem.backButtonTitle = ""
-        
-        
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.custom(font: .bold, size: 30),
-            .foregroundColor: UIColor.customDarkGray
-        ]
-        categoryVC.navigationController?.navigationBar.titleTextAttributes = attributes
-        
-        let rightButtonImage = UIImage(named: "questionYellow")
-        let rightButton = UIBarButtonItem(image: rightButtonImage, style: .plain, target: self, action: #selector(didTapRightButton))
-        categoryVC.navigationItem.rightBarButtonItem = rightButton
     }
-    
-    @objc func didTapRightButton() {
-        //Open game rules
-    }
-    
 }
 

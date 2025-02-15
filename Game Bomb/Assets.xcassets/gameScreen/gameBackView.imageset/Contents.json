@@ -1,8 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "gameBackView.pdf",
-      "idiom" : "universal"
+      "filename" : "gameBackView.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {
