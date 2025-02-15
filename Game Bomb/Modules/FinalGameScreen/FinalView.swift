@@ -66,6 +66,12 @@ final class FinalView: UIView {
         anotherQuestionButton.titleLabel?.font = .custom(font: .medium, size: 20)
         anotherQuestionButton.isHidden = false
         anotherQuestionButton.layer.cornerRadius = 10
+        anotherQuestionButton.layer.cornerRadius = 10
+        anotherQuestionButton.layer.shadowColor = UIColor.black.cgColor
+        anotherQuestionButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        anotherQuestionButton.layer.shadowRadius = 4
+        anotherQuestionButton.layer.shadowOpacity = 0.25
+        anotherQuestionButton.layer.masksToBounds = false
         anotherQuestionButton.addTarget(self, action: #selector(anotherQuestionButtonAction), for: .touchUpInside)
         anotherQuestionButton.translatesAutoresizingMaskIntoConstraints = false
         return anotherQuestionButton
@@ -79,6 +85,12 @@ final class FinalView: UIView {
         startAgainButton.titleLabel?.font = .custom(font: .medium, size: 20)
         startAgainButton.isHidden = false
         startAgainButton.layer.cornerRadius = 10
+        startAgainButton.layer.cornerRadius = 10
+        startAgainButton.layer.shadowColor = UIColor.black.cgColor
+        startAgainButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        startAgainButton.layer.shadowRadius = 4
+        startAgainButton.layer.shadowOpacity = 0.25
+        startAgainButton.layer.masksToBounds = false
         startAgainButton.addTarget(self, action: #selector(startAgainButtonAction), for: .touchUpInside)
         startAgainButton.translatesAutoresizingMaskIntoConstraints = false
         return startAgainButton
