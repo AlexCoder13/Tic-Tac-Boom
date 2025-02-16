@@ -72,6 +72,7 @@ class CategoryViewCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             iconImageView.widthAnchor.constraint(equalToConstant: 80),
+            iconImageView.heightAnchor.constraint(equalToConstant: 80),
             iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             iconImageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -5),
             
@@ -93,7 +94,7 @@ class CategoryViewCell: UICollectionViewCell {
     //MARK: - Properties
     override var isSelected: Bool {
         didSet {
-            backgroundColor = isSelected ? .customgreen : .customLightGray
+            backgroundColor = isSelected ? .CustomColors.green : .CustomColors.lightGray
             checkImageView.isHidden = !isSelected
         }
     }

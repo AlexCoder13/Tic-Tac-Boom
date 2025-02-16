@@ -22,11 +22,9 @@ final class GameModel {
     // MARK: - Properties
     weak var delegate: GameModelDelegate?
     
-    private var questions = MockData()
-    
     private var timer: Timer?
     private var currentSeconds = 0
-    private let secondsForGame = [10, 15, 20, 25, 30, 35, 40]
+    private let secondsForGame = GameSettings.shared.getGameSettings()
     private var selectedTimerDuration: Int = 0
     
     var animation: DotLottieAnimation?
@@ -38,25 +36,25 @@ final class GameModel {
     
     // MARK: - Methods
     func setupAnimation() {
-        guard URL(string: "https://lottie.host/283b3c79-ebb6-4439-a235-5b54cc15f7ad/zlrIDXcPgo.lottie") != nil else { return }
+        guard URL(string: LottieConstant.url) != nil else { return }
         
-        animation = DotLottieAnimation(webURL: "https://lottie.host/283b3c79-ebb6-4439-a235-5b54cc15f7ad/zlrIDXcPgo.lottie", config: AnimationConfig(autoplay: false, loop: false))
+        animation = DotLottieAnimation(webURL: LottieConstant.url, config: AnimationConfig(autoplay: false, loop: false))
         animationView = animation?.view()
         animationView?.isHidden = false
     }
     
     func prepareSounds() {
-        loadSound(name: "soundBomb", player: &tickAudioPlayer)
-        loadSound(name: "soundBoom", player: &audioPlayer)
+        loadSound(name: SoundFiles.soundBomb, player: &tickAudioPlayer)
+        loadSound(name: SoundFiles.soundBoom, player: &audioPlayer)
     }
     
     func prepareQuestions() -> String {
-        let questions = UserQuestions.shared.getSelectedQuestions()
+        let questions = UserQuestionsService.shared.getSelectedQuestions()
         return questions.randomElement() ?? "Назовите вид Зимнего спорта"
     }
     
     func startGame() {
-        selectedTimerDuration = secondsForGame.randomElement() ?? 30
+        selectedTimerDuration = secondsForGame.time
         startTimer()
         tickAudioPlayer?.play()
         animation?.setSpeed(speed: animationDuration / Float(selectedTimerDuration))
@@ -84,7 +82,9 @@ final class GameModel {
     }
     
     private func loadSound(name: String, player: inout AVAudioPlayer?) {
-        guard let path = Bundle.main.path(forResource: name, ofType: "mp3") else { return }
+        guard let path = Bundle.main.path(forResource: name, ofType: "mp3") else {
+            return
+        }
         let url = URL(fileURLWithPath: path)
         do {
             player = try AVAudioPlayer(contentsOf: url)
@@ -105,6 +105,7 @@ final class GameModel {
         )
     }
     
+    //    MARK: - Actions
     @objc private func updateTimer() {
         currentSeconds += 1
         delegate?.timerDidUpdate(seconds: currentSeconds)

@@ -12,22 +12,23 @@ class FinalGameViewController: UIViewController {
     private let finalView = FinalView()
     private let finalModel = FinalModel()
     
+    //    MARK: - LifeCycle
     override func loadView() {
         view = finalView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupDelegates()
         setupNavigation()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-            finalModel.exitGame()
+        finalModel.exitGame()
     }
     
+    //    MARK: - Methods
     private func setupDelegates() {
         finalView.delegate = self
     }
@@ -38,6 +39,7 @@ class FinalGameViewController: UIViewController {
     }
 }
 
+// MARK: - Extensions FinalViewDelegate
 extension FinalGameViewController: FinalViewDelegate {
     func anotherQuestionButtonTapped() {
         finalView.questuonLabel.text = finalModel.prepeareLoss()

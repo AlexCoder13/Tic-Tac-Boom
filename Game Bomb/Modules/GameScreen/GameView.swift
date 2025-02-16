@@ -16,10 +16,9 @@ final class GameView: UIView {
     // MARK: - Properties
     weak var delegate: GameViewDelegate?
     
-    // UI Elements
     lazy var backImageView: UIImageView = {
         let backImageView = UIImageView()
-        backImageView.image = UIImage(named: "gameBackView")
+        backImageView.image = .CustomImage.grayBackground
         backImageView.contentMode = .scaleAspectFill
         backImageView.isUserInteractionEnabled = false
         backImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -28,8 +27,8 @@ final class GameView: UIView {
     
     lazy var gameLabel: UILabel = {
         let gameLabel = UILabel()
-        gameLabel.text = "Игра"
-        gameLabel.textColor = .customDarkGray
+        gameLabel.text = K.gameTitle
+        gameLabel.textColor = .CustomColors.darkGray
         gameLabel.font = .custom(font: .bold, size: 30)
         gameLabel.textAlignment = .center
         gameLabel.numberOfLines = 0
@@ -39,8 +38,8 @@ final class GameView: UIView {
     
     lazy var questuonLabel: UILabel = {
         let questuonLabel = UILabel()
-        questuonLabel.text = "Нажмите 'Запустить' чтобы начать игру"
-        questuonLabel.textColor = .customDarkGray
+        questuonLabel.text = K.questionTitle
+        questuonLabel.textColor = .CustomColors.darkGray
         questuonLabel.font = .custom(font: .medium, size: 28)
         questuonLabel.textAlignment = .center
         questuonLabel.numberOfLines = 0
@@ -50,7 +49,7 @@ final class GameView: UIView {
     
     lazy var bombImage: UIImageView = {
         let bombImage = UIImageView()
-        bombImage.image = UIImage(named: "BombImage")
+        bombImage.image = .CustomImage.bomb
         bombImage.isHidden = false
         bombImage.translatesAutoresizingMaskIntoConstraints = false
         return bombImage
@@ -58,17 +57,12 @@ final class GameView: UIView {
     
     lazy var startButton: UIButton = {
         let startButton = UIButton()
-        startButton.setTitle("Запустить", for: .normal)
-        startButton.setTitleColor(UIColor(named: "customDarkGrayColor"), for: .normal)
-        startButton.backgroundColor = UIColor(named: "customyellowColor")
+        startButton.setTitle(K.startButtonTitle, for: .normal)
+        startButton.setTitleColor(.CustomColors.darkGray, for: .normal)
+        startButton.backgroundColor = .CustomColors.yellow
         startButton.titleLabel?.font = .custom(font: .medium, size: 20)
         startButton.isHidden = false
         startButton.layer.cornerRadius = 10
-        startButton.layer.shadowColor = UIColor.black.cgColor
-        startButton.layer.shadowOffset = CGSize(width: 0, height: 4)
-        startButton.layer.shadowRadius = 4
-        startButton.layer.shadowOpacity = 0.25
-        startButton.layer.masksToBounds = false
         startButton.addTarget(self, action: #selector(startButtonAction), for: .touchUpInside)
         startButton.translatesAutoresizingMaskIntoConstraints = false
         return startButton
@@ -77,7 +71,6 @@ final class GameView: UIView {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupUI()
         setupConstraints()
     }
@@ -86,17 +79,29 @@ final class GameView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup
+    // MARK: - Methods
     private func setupUI() {
-        backgroundColor = .customGray
+        backgroundColor = .CustomColors.gray
         
         addSubview(backImageView)
         addSubview(startButton)
-        backImageView.addSubview(gameLabel)
-        backImageView.addSubview(questuonLabel)
-        backImageView.addSubview(bombImage)
+        [
+            gameLabel,
+            questuonLabel,
+            bombImage
+        ].forEach {
+            backImageView.addSubview($0)
+        }
     }
     
+    // MARK: - Actions
+    @objc private func startButtonAction() {
+        delegate?.startButtonTapped()
+    }
+}
+
+// MARK: - Extensions Constraints
+extension GameView {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             backImageView.topAnchor.constraint(equalTo: topAnchor),
@@ -125,10 +130,4 @@ final class GameView: UIView {
             startButton.widthAnchor.constraint(equalToConstant: 330)
         ])
     }
-    
-    // MARK: - Actions
-    @objc private func startButtonAction() {
-        delegate?.startButtonTapped()
-    }
 }
-

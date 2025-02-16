@@ -66,13 +66,14 @@ class HelpCategoryViewCell: UICollectionViewCell {
         setupConstraints()
     }
     
-    private func  setupConstraints() {
+    private func setupConstraints() {
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         checkImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             iconImageView.widthAnchor.constraint(equalToConstant: 80),
+            iconImageView.heightAnchor.constraint(equalToConstant: 80),
             iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             iconImageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -5),
             

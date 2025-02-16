@@ -13,8 +13,6 @@ final class GameViewController: UIViewController {
     private let gameView = GameView()
     private let gameModel = GameModel()
     
-    var questionCategories = MockData()
-    
     // MARK: - Lifecycle
     override func loadView() {
         view = gameView
@@ -22,7 +20,6 @@ final class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupDelegates()
         setupNavigation()
         gameModel.setupAnimation()
@@ -31,10 +28,10 @@ final class GameViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-            gameModel.exitGame()
+        gameModel.exitGame()
     }
     
-    // MARK: - Setup
+    // MARK: - Methods
     private func setupDelegates() {
         gameView.delegate = self
         gameModel.delegate = self
@@ -42,12 +39,12 @@ final class GameViewController: UIViewController {
     
     private func setupNavigation() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "pause.circle"),
+            image: UIImage(systemName: K.Player.pause),
             style: .done,
             target: self,
             action: #selector(pauseButtonTapped)
         )
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "customDarkGrayColor")
+        navigationItem.rightBarButtonItem?.tintColor = .CustomColors.darkGray
         navigationItem.rightBarButtonItem?.isHidden = false
         navigationItem.rightBarButtonItem?.isEnabled = false
         
@@ -63,7 +60,7 @@ final class GameViewController: UIViewController {
     }
 }
 
-// MARK: - GameViewDelegate
+// MARK: - Extensions GameViewDelegate
 extension GameViewController: GameViewDelegate {
     func startButtonTapped() {
         gameView.startButton.isHidden = true
@@ -73,7 +70,7 @@ extension GameViewController: GameViewDelegate {
     }
 }
 
-// MARK: - GameModelDelegate
+// MARK: - Extensions GameModelDelegate
 extension GameViewController: GameModelDelegate {
     func timerDidUpdate(seconds: Int) {
         gameModel.tickAudioPlayer?.play()
@@ -104,12 +101,12 @@ extension GameViewController: GameModelDelegate {
     
     func gameDidPause() {
         navigationItem.rightBarButtonItem?.isHidden = false
-        navigationItem.rightBarButtonItem?.image = UIImage(systemName: "play.circle")
+        navigationItem.rightBarButtonItem?.image = UIImage(systemName: K.Player.play)
         navigationItem.rightBarButtonItem?.action = #selector(resumeButtonTapped)
     }
     
     func gameDidResume() {
-        navigationItem.rightBarButtonItem?.image = UIImage(systemName: "pause.circle")
+        navigationItem.rightBarButtonItem?.image = UIImage(systemName: K.Player.pause)
         navigationItem.rightBarButtonItem?.action = #selector(pauseButtonTapped)
         navigationItem.rightBarButtonItem?.isHidden = false
     }

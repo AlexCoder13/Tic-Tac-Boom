@@ -20,15 +20,7 @@ final class MainViewController: UIViewController {
         return view
     }()
     
-    private let rules = [
-        ("Все игроки становятся в круг.", nil),
-        ("Первый игрок берет телефон и нажимает кнопку:", UIImage(named: "startButton")),
-        ("На экране появляется вопрос “Назовите Фрукт”.", nil),
-        ("Игрок отвечает на вопрос и после правильного ответа передает телефон следующему игроку.", nil),
-        ("Игроки по кругу отвечают на один и тот же вопрос до тех пор, пока не взорвется бомба.", nil),
-        ("Проигравшим считается тот, в чьих руках взорвалась бомба.", nil),
-        ("Если выбран режим игры “С Заданиями”, то проигравший выполняет задание.", nil)
-    ]
+    private let rules = K.rules
     
     //    MARK: - LifeCycle
     override func loadView() {
@@ -37,37 +29,62 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        mainView.delegate = self
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "setting"), style: .done, target: self, action: #selector(didTapSettingButton))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "questionRed1"), style: .plain, target: self, action: #selector(didTapQuestionButton))
-        navigationItem.rightBarButtonItem?.tintColor = .red
-        
-        rulesView.delegate = self
-        rulesView.isHidden = true
-        rulesView.tableView.dataSource = self
-        rulesView.tableView.delegate = self
-       
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipeView(_:)))
-        swipeDown.direction = .down
-        view.addGestureRecognizer(swipeDown)
-        
-        setupView()
-        setupConstraints()
-        buttonPushed()
-        
-        navigationItem.backButtonDisplayMode = .minimal
-        navigationController?.navigationBar.tintColor = UIColor(named: "customPrimaryColor")
+        setNavigationVC()
+        setDelegate()
+        setRulesView()
     }
     
     //    MARK: - Methods
+    private func setNavigationVC() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: .CustomImage.setting,
+            style: .done,
+            target: self,
+            action: #selector(didTapSettingButton)
+        )
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: .CustomImage.redQuestion,
+            style: .plain,
+            target: self,
+            action: #selector(didTapQuestionButton)
+        )
+        navigationItem.rightBarButtonItem?.tintColor = .red
+        
+        navigationItem.backButtonDisplayMode = .minimal
+        navigationController?.navigationBar.tintColor = .CustomColors.textPrimaryColor
+    }
+    
+    private func setDelegate() {
+        mainView.delegate = self
+        rulesView.delegate = self
+        rulesView.tableView.dataSource = self
+        rulesView.tableView.delegate = self
+    }
+    
+    private func setRulesView() {
+        rulesView.isHidden = true
+        let swipeDown = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(swipeView(_:))
+        )
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
+    }
+    
     @objc func swipeView(_ sender: UISwipeGestureRecognizer) {
         UIView.animate(withDuration: 1.0) {
             if sender.direction == .down {
-                self.rulesView.frame = CGRect(x: 0, y: self.view.frame.size.height, width: self.rulesView.frame.size.width, height: self.rulesView.frame.size.height)
+                self.rulesView.frame = CGRect(
+                    x: 0,
+                    y: self.view.frame.size.height,
+                    width: self.rulesView.frame.size.width,
+                    height: self.rulesView.frame.size.height
+                )
             }
         }
     }
     
+    //    MARK: - Actions
     @objc func didTapSettingButton() {
         let categoryVC = SettingViewController()
         navigationController?.pushViewController(categoryVC, animated: true)
@@ -75,11 +92,16 @@ final class MainViewController: UIViewController {
     
     @objc func didTapQuestionButton() {
         UIView.animate(withDuration: 1.0) {
-            self.rulesView.frame = CGRect(x: 0, y: 0, width: self.rulesView.frame.size.width, height: self.rulesView.frame.size.height)
+            self.rulesView.frame = CGRect(
+                x: 0,
+                y: 0,
+                width: self.rulesView.frame.size.width,
+                height: self.rulesView.frame.size.height
+            )
             self.rulesView.isHidden = false
         }
         rulesView.isHidden = false
-        rulesView.backgroundColor = .customwhite
+        rulesView.backgroundColor = .CustomColors.white
         view.addSubview(rulesView)
         NSLayoutConstraint.activate([
             rulesView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.73),
@@ -87,27 +109,6 @@ final class MainViewController: UIViewController {
             rulesView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             rulesView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-    private func setupView() {
-//        view.addSubview(mainView.button)
-    }
-    
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-//            mainView.button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            mainView.button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-    }
-    
-    private func buttonPushed() {
-//        mainView.button.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
-    }
-    
-    //    MARK: - Actions
-    @objc
-    private func buttonPush() {
-        let gameController = GameViewController()
-        navigationController?.pushViewController(gameController, animated: true)
     }
 }
 
@@ -123,14 +124,17 @@ extension MainViewController: MainViewDelegate, RulesViewDelegate {
         let categoryVC = CategoryViewController()
         navigationController?.pushViewController(categoryVC, animated: true)
     }
+    
     func swipeBackButtonTapped() {
         rulesView.isHidden = true
     }
+    
     @objc func didTapRightButton() {
         //Open game rules
     }
 }
 
+// MARK: - Extensions UITableViewDelegate
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return rules.count
@@ -142,17 +146,21 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         }
         let rule = rules[indexPath.row]
         let attributedText = createAttributedText(for: rule.0)
-        cell.configureCell(number: indexPath.row + 1, description: attributedText, image: rule.1)
+        cell.configureCell(
+            number: indexPath.row + 1,
+            description: attributedText,
+            image: rule.1
+        )
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         return cell
     }
-   
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 1 {
             return 90
         }
-            return UITableView.automaticDimension
+        return UITableView.automaticDimension
     }
     
     private func createAttributedText(for text: String) -> NSAttributedString {

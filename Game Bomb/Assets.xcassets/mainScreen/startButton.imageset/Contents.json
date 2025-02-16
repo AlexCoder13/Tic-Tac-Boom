@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Старт игры.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
